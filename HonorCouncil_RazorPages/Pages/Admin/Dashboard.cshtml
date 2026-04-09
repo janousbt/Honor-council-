@@ -1,0 +1,81 @@
+@page
+@model HonorCouncil_RazorPages.Pages.Admin.DashboardModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<section class="page-shell">
+    <header class="page-header">
+        <div>
+            <p class="eyebrow">Case Queue Overview</p>
+            <h1>Dashboard</h1>
+        </div>
+    </header>
+
+    <div class="dashboard-grid">
+        <article class="panel metric-card">
+            <div class="metric-value">@Model.Summary.OpenCases</div>
+            <div class="metric-label">Open cases</div>
+        </article>
+        <article class="panel metric-card">
+            <div class="metric-value">@Model.Summary.UnassignedCases</div>
+            <div class="metric-label">Unassigned</div>
+        </article>
+        <article class="panel metric-card">
+            <div class="metric-value">@Model.Summary.HearingsThisWeek</div>
+            <div class="metric-label">Hearings this week</div>
+        </article>
+        <article class="panel metric-card">
+            <div class="metric-value">@Model.Summary.PendingAppeals</div>
+            <div class="metric-label">Pending appeal</div>
+        </article>
+    </div>
+
+    <article class="panel">
+        <div class="panel-heading">
+            <h2>Active cases - prioritized</h2>
+            <a class="button button-ghost" asp-page="/Admin/Cases/Index">View all</a>
+        </div>
+
+        @if (Model.Summary.PriorityCases.Count == 0)
+        {
+            <p class="empty-state">No cases are currently queued.</p>
+        }
+        else
+        {
+            <div class="table-like">
+                <div class="table-row table-row-admin-dashboard header">
+                    <div>Student</div>
+                    <div>Course</div>
+                    <div>Type</div>
+                    <div>Priority</div>
+                    <div>Status</div>
+                    <div>Action</div>
+                </div>
+                @foreach (var item in Model.Summary.PriorityCases)
+                {
+                    var priorityBadgeClass = item.PriorityLabel.ToLowerInvariant() switch
+                    {
+                        var label when label.Contains("second") || label.Contains("senior") || label.Contains("high") || label.Contains("urgent") => "badge-danger",
+                        var label when label.Contains("formal") || label.Contains("review") || label.Contains("priority") => "badge-warning",
+                        _ => "badge-info"
+                    };
+
+                    <div class="table-row table-row-admin-dashboard">
+                        <div>@item.StudentName<br/><small>@item.StudentNumber - @item.AcademicYear</small></div>
+                        <div>
+                            @if (!string.IsNullOrWhiteSpace(item.CourseNumber))
+                            {
+                                <small>@item.CourseNumber</small>
+                            }
+                        </div>
+                        <div><span class="badge @(item.ReportType == ReportType.Formal ? "badge-accent" : "badge-warning")">@item.ReportType</span></div>
+                        <div><span class="badge @priorityBadgeClass">@item.PriorityLabel</span></div>
+                        <div><span class="badge @(item.InvestigatorName is null ? "badge-warning" : "badge-info")">@item.StatusDisplay</span></div>
+                        <div><a asp-page="/Admin/Cases/Details" asp-route-id="@item.CaseId">View</a></div>
+                    </div>
+                }
+            </div>
+        }
+    </article>
+</section>

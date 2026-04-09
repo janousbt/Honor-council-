@@ -1,0 +1,57 @@
+@page
+@model HonorCouncil_RazorPages.Pages.Student.Schedule.IndexModel
+@{
+    ViewData["Title"] = "Upload schedule";
+}
+
+<section class="student-page-shell">
+    <article class="student-card student-card-wide">
+        <div class="student-card-header">
+            <div>
+                <h1>Upload schedule</h1>
+                <p class="student-card-subtitle">Upload your class schedule so Honor Council staff can review it.</p>
+            </div>
+        </div>
+
+        @if (!ViewContext.ModelState.IsValid)
+        {
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(Model.StatusMessage))
+        {
+            <div class="student-status-banner">@Model.StatusMessage</div>
+        }
+
+        <form method="post" enctype="multipart/form-data" asp-page-handler="Upload" class="student-form-panel student-dashboard-form">
+            <div class="field-group">
+                <label class="student-field-label" for="schedule-upload">Choose schedule file</label>
+                <input id="schedule-upload" class="student-evidence-input" type="file" name="scheduleFile" />
+            </div>
+            <button type="submit" class="student-submit-button">Upload schedule</button>
+        </form>
+
+        <div style="margin-top: 1rem;">
+            <h2>Uploaded schedules</h2>
+            @if (Model.ScheduleFiles.Count == 0)
+            {
+                <p class="student-empty-state">No class schedules have been uploaded yet.</p>
+            }
+            else
+            {
+                <ul class="evidence-list">
+                    @foreach (var schedule in Model.ScheduleFiles)
+                    {
+                        <li>
+                            <div>
+                                <strong>@schedule.FileName</strong>
+                                <div class="student-field-copy">@schedule.UploadedBy - @schedule.UploadedUtcDisplay</div>
+                            </div>
+                            <a class="student-inline-link" asp-page="/Schedule/Download" asp-route-id="@schedule.Id">Download</a>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    </article>
+</section>

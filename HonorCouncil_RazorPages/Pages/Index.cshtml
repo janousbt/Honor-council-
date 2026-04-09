@@ -1,0 +1,53 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Create a report";
+}
+
+<section class="page-shell single-column">
+    <header class="page-header">
+        <div>
+            <p class="eyebrow">Honor Council Intake</p>
+            <h1>Create a report</h1>
+        </div>
+    </header>
+
+    <div class="selection-grid">
+        <article class="panel selection-card">
+            <div class="selection-heading">
+                <h2>Informal Report</h2>
+                <span class="badge badge-warning">Routes to HC email only</span>
+            </div>
+            <p>
+                A settlement between student and faculty. Faculty assigns the penalty directly.
+                Students may only have one informal record. A second violation must lead to a formal filing.
+            </p>
+            <ul class="rule-list">
+                <li>One per student maximum</li>
+                <li>Faculty assigns penalty</li>
+            </ul>
+            <a class="button button-secondary" asp-page="/Reports/Informal/Create">Start informal report</a>
+        </article>
+
+        <article class="panel selection-card">
+            <div class="selection-heading">
+                <h2>Formal Report</h2>
+                <span class="badge badge-accent">Routes to HC, president, coordinator</span>
+            </div>
+            <p>
+                Used when a case cannot be resolved directly or requires Honor Council review.
+                Formal filings must include evidence and satisfy the 90-day filing rule.
+            </p>
+            <ul class="rule-list">
+                <li>Requires evidence upload</li>
+                <li>Enforces 90-day rule from violation date</li>
+            </ul>
+            <a class="button button-primary" asp-page="/Reports/Formal/Create">Start formal report</a>
+        </article>
+    </div>
+
+    <footer class="page-note">
+        <span>Not sure which to file?</span>
+        <a class="text-link" href="#" aria-disabled="true">View Honor Code Policy</a>
+    </footer>
+</section>

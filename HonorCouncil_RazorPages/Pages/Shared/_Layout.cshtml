@@ -1,0 +1,92 @@
+@using HonorCouncil_RazorPages.Services.Interfaces
+@inject ICurrentUserService CurrentUser
+@{
+    var isStaff = CurrentUser.IsAuthenticated && CurrentUser.IsInRole("President", "Coordinator", "Investigator", "Admin");
+    var isStudent = CurrentUser.IsAuthenticated && CurrentUser.IsInRole("Student");
+    var isFaculty = CurrentUser.IsAuthenticated && CurrentUser.IsInRole("Faculty");
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"] - Honor Council</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/HonorCouncil_RazorPages.styles.css" asp-append-version="true"/>
+</head>
+<body>
+<div class="app-shell @(isStudent ? "student-shell" : string.Empty)">
+    @if (CurrentUser.IsAuthenticated && (isStaff || isStudent || isFaculty))
+    {
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <span class="sidebar-title">JMU Honor Council</span>
+                @if (isStudent)
+                {
+                    <span class="sidebar-subtitle">Student View</span>
+                }
+                else
+                {
+                    <span class="sidebar-subtitle">@CurrentUser.Role View</span>
+                }
+            </div>
+            @if (!isStudent)
+            {
+                <div class="section-divider" aria-hidden="true"></div>
+            }
+
+            @if (isStaff)
+            {
+                <partial name="_AdminSidebar"/>
+            }
+            else if (isStudent)
+            {
+                <partial name="_StudentSidebar"/>
+            }
+            else if (isFaculty)
+            {
+                <partial name="_FacultySidebar"/>
+            }
+        </aside>
+    }
+
+    <div class="content-shell">
+        <header class="topbar">
+            <div>
+                <div class="topbar-title">Honor Council Case Management</div>
+                <div class="topbar-subtitle">@ViewData["Title"]</div>
+            </div>
+
+            <div class="topbar-actions">
+                @if (CurrentUser.IsAuthenticated)
+                {
+                    <div class="user-pill">
+                        <strong>@CurrentUser.DisplayName</strong>
+                        <span>@CurrentUser.Email</span>
+                    </div>
+                    <form method="post" asp-page="/Account/Logout">
+                        <button type="submit" class="button button-ghost">Sign out</button>
+                    </form>
+                }
+            </div>
+        </header>
+        @if (!isStudent)
+        {
+            <div class="section-divider" aria-hidden="true"></div>
+        }
+
+        <main class="main-content" role="main">
+            @RenderBody()
+        </main>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

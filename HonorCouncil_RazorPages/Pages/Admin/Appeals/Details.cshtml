@@ -1,0 +1,41 @@
+@page "{caseId:int}"
+@model HonorCouncil_RazorPages.Pages.Admin.Appeals.DetailsModel
+@{
+    ViewData["Title"] = "Appeal review";
+}
+
+<section class="page-shell single-column">
+    <header class="page-header">
+        <div>
+            <p class="eyebrow">@Model.Appeal.CaseNumber</p>
+            <h1>Appeal review</h1>
+        </div>
+        <span class="badge badge-warning">@Model.Appeal.StatusDisplay</span>
+    </header>
+
+    <article class="panel">
+        <dl class="summary-grid">
+            <dt>Student</dt><dd>@Model.Appeal.StudentName</dd>
+            <dt>Course</dt><dd>@Model.Appeal.CourseDisplay</dd>
+            <dt>Outcome</dt><dd>@Model.Appeal.OutcomeSummary</dd>
+            <dt>Submitted</dt><dd>@Model.Appeal.SubmittedUtc.ToLocalTime().ToString("MMMM d, yyyy")</dd>
+            <dt>Grounds</dt><dd>@Model.Appeal.Grounds</dd>
+        </dl>
+        <p>@Model.Appeal.Description</p>
+    </article>
+
+    <article class="panel">
+        <form method="post" class="form-grid">
+            <input type="hidden" asp-for="Input.CaseId" />
+            <div class="field-group">
+                <label asp-for="Input.Status"></label>
+                <select asp-for="Input.Status" asp-items="Model.StatusOptions"></select>
+            </div>
+            <div class="field-group">
+                <label asp-for="Input.ReviewNotes"></label>
+                <textarea asp-for="Input.ReviewNotes" rows="4"></textarea>
+            </div>
+            <button type="submit" class="button button-primary">Save appeal review</button>
+        </form>
+    </article>
+</section>

@@ -1,0 +1,118 @@
+@page
+@model HonorCouncil_RazorPages.Pages.Faculty.DashboardModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<section class="page-shell">
+    <header class="page-header">
+        <div>
+            <p class="eyebrow">Faculty case overview</p>
+            <h1>Dashboard</h1>
+        </div>
+    </header>
+
+    <div class="dashboard-grid">
+        <article class="panel metric-card">
+            <div class="metric-value">@Model.Summary.OpenCases</div>
+            <div class="metric-label">Open cases</div>
+        </article>
+        <article class="panel metric-card">
+            <div class="metric-value">@Model.Summary.EvidenceFiles</div>
+            <div class="metric-label">Evidence files</div>
+        </article>
+        <article class="panel metric-card">
+            <div class="metric-value">@Model.Summary.HearingsThisWeek</div>
+            <div class="metric-label">Hearings this week</div>
+        </article>
+        <article class="panel metric-card">
+            <div class="metric-value">@Model.Summary.PendingAppeals</div>
+            <div class="metric-label">Pending appeals</div>
+        </article>
+    </div>
+
+    <div class="panel-grid two-up">
+        <article class="panel">
+            <div class="panel-heading">
+                <h2>Your cases</h2>
+            </div>
+
+            @if (Model.Summary.Cases.Count == 0)
+            {
+                <p class="empty-state">No cases are currently associated with your account.</p>
+            }
+            else
+            {
+                <div class="table-like">
+                    <div class="table-row table-row-faculty-dashboard header">
+                        <div>Student</div>
+                        <div class="faculty-course-column">Course</div>
+                        <div>Type</div>
+                        <div>Status</div>
+                        <div>Action</div>
+                    </div>
+                    @foreach (var item in Model.Summary.Cases)
+                    {
+                        <div class="table-row table-row-faculty-dashboard">
+                            <div>
+                                <strong>@item.StudentName</strong><br/>
+                                <small>@item.StudentNumber - @item.AcademicYear</small><br/>
+                                <small>@item.CaseNumber</small>
+                            </div>
+                            <div class="faculty-course-column">
+                                @if (!string.IsNullOrWhiteSpace(item.CourseNumber))
+                                {
+                                    <small>@item.CourseNumber</small>
+                                }
+                            </div>
+                            <div>
+                                <span class="badge @(item.ReportType == ReportType.Formal ? "badge-accent" : "badge-warning")">@item.ReportType</span>
+                            </div>
+                            <div>
+                                <span class="badge @(item.InvestigatorName is null ? "badge-warning" : "badge-info")">@item.StatusDisplay</span><br/>
+                                @if (item.ReportType == ReportType.Formal)
+                                {
+                                    <small>@(item.InvestigatorName ?? "No investigator assigned")</small>
+                                    @if (item.ScheduledStartUtc.HasValue)
+                                    {
+                                        <br/>
+                                        <small>
+                                            Hearing: @item.ScheduledStartUtc.Value.ToLocalTime().ToString("MMM d, yyyy h:mm tt")
+                                            @if (item.HearingFormat.HasValue)
+                                            {
+                                                <text> (@(item.HearingFormat == HearingFormat.InPerson ? "In Person" : item.HearingFormat.Value.ToString()))</text>
+                                            }
+                                        </small>
+                                    }
+                                }
+                            </div>
+                            <div>
+                                <a asp-page="/Faculty/Cases/Details" asp-route-id="@item.CaseId">View</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </article>
+
+        <article class="panel">
+            <h2>Recent evidence</h2>
+            @if (Model.Summary.RecentEvidence.Count == 0)
+            {
+                <p class="empty-state">No evidence is on file for your cases yet.</p>
+            }
+            else
+            {
+                <ul class="summary-list">
+                    @foreach (var item in Model.Summary.RecentEvidence)
+                    {
+                        <li>
+                            <strong>@item.CaseNumber</strong> - @item.FileName
+                            <a asp-page="/Evidence/Download" asp-route-id="@item.Id">Download</a>
+                        </li>
+                    }
+                </ul>
+            }
+        </article>
+    </div>
+</section>

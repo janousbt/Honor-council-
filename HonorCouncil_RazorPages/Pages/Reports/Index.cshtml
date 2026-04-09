@@ -1,0 +1,51 @@
+@page
+@model HonorCouncil_RazorPages.Pages.Reports.IndexModel
+@{
+    ViewData["Title"] = "Report a violation";
+}
+
+<section class="student-page-shell report-landing-shell">
+    <article class="student-card student-card-wide report-landing-card">
+        <div class="student-card-header report-landing-header">
+            <div>
+                <h1>Report a Violation</h1>
+                <p class="student-card-subtitle">Begin a report and attach any supporting evidence for review.</p>
+            </div>
+            <span class="student-status-pill">(5 violations max)</span>
+        </div>
+
+        <section class="student-embedded-card report-landing-form">
+            <h2>Report 1 of 5</h2>
+
+            <div class="field-group">
+                <label for="reportedStudent">Student being reported:</label>
+                <input id="reportedStudent" type="text" placeholder="Full name" />
+            </div>
+
+            <div class="field-group">
+                <label for="reportedCourse">Course where violation occurred:</label>
+                <input id="reportedCourse" type="text" placeholder="Course name / number" />
+            </div>
+
+            <div class="field-group">
+                <label for="violationDescription">Violation description:</label>
+                <textarea id="violationDescription" rows="4" placeholder="Describe what you observed..."></textarea>
+            </div>
+
+            <div class="field-group">
+                <label>Supporting evidence (optional):</label>
+                <div class="student-upload-box report-landing-upload">
+                    <div class="student-upload-title">
+                        Choose files from your computer
+                    </div>
+                    <input id="reportEvidenceFiles" class="student-evidence-input report-evidence-input" type="file" multiple />
+                    <div class="student-upload-note">PDF, DOCX, PNG - max 25 MB</div>
+                </div>
+            </div>
+
+            <div class="report-landing-actions">
+                <a class="student-submit-button" asp-page="/Reports/Formal/Create">Submit Report</a>
+            </div>
+        </section>
+    </article>
+</section>

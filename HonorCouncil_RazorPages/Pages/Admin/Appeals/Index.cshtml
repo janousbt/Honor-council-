@@ -1,0 +1,42 @@
+@page
+@model HonorCouncil_RazorPages.Pages.Admin.Appeals.IndexModel
+@{
+    ViewData["Title"] = "Appeals";
+}
+
+<section class="page-shell">
+    <header class="page-header">
+        <div>
+            <p class="eyebrow">Appeal Review</p>
+            <h1>Appeals</h1>
+        </div>
+        <span class="badge badge-info">@Model.Appeals.Count appeal(s)</span>
+    </header>
+
+    <article class="panel">
+        @if (Model.Appeals.Count == 0)
+        {
+            <p class="empty-state">No appeals have been filed.</p>
+        }
+        else
+        {
+            <div class="table-like">
+                <div class="table-row header">
+                    <div>Case</div>
+                    <div>Outcome</div>
+                    <div>Status</div>
+                    <div>Action</div>
+                </div>
+                @foreach (var item in Model.Appeals)
+                {
+                    <div class="table-row">
+                        <div>@item.CaseNumber<br/><small>@item.StudentName</small></div>
+                        <div>@item.OutcomeSummary</div>
+                        <div><span class="badge badge-warning">@item.StatusDisplay</span></div>
+                        <div><a asp-page="/Admin/Appeals/Details" asp-route-caseId="@item.CaseId">Review</a></div>
+                    </div>
+                }
+            </div>
+        }
+    </article>
+</section>

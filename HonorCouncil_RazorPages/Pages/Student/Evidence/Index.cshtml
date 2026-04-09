@@ -1,0 +1,96 @@
+@page
+@model HonorCouncil_RazorPages.Pages.Student.Evidence.IndexModel
+@{
+    ViewData["Title"] = "My evidence";
+}
+
+<section class="student-page-shell">
+    <article class="student-card student-card-wide">
+        <div class="student-card-header">
+            <div>
+                <h1>My Evidence</h1>
+                <p class="student-card-subtitle">Upload, review, and download the files attached to your cases.</p>
+            </div>
+        </div>
+
+        @if (!ViewContext.ModelState.IsValid)
+        {
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(Model.StatusMessage))
+        {
+            <div class="student-status-banner">@Model.StatusMessage</div>
+        }
+
+        @if (Model.Cases.Count == 0)
+        {
+            <p class="student-empty-state">No active cases are currently on file for your account.</p>
+        }
+        else
+        {
+            <div class="student-case-stack">
+                @foreach (var item in Model.Cases)
+                {
+                    <article class="student-case-card">
+                        <div class="student-case-header">
+                            <div>
+                                <div class="student-case-number">Case @item.CaseNumber</div>
+                                <div class="student-case-course">@item.CourseDisplay</div>
+                            </div>
+                        </div>
+
+                        <div class="student-evidence-pane-grid">
+                            <section class="student-embedded-card student-evidence-pane">
+                                <div class="student-card-header">
+                                    <div>
+                                        <h2>Upload evidence</h2>
+                                        <p class="student-card-subtitle">Attach one or more files to this case.</p>
+                                    </div>
+                                </div>
+
+                                <form method="post" enctype="multipart/form-data" asp-page-handler="Upload" class="student-evidence-upload-form">
+                                    <input type="hidden" name="caseId" value="@item.CaseId" />
+                                    <div class="student-field-preview">
+                                        <label class="student-field-label" for="upload-@item.CaseId">Choose files</label>
+                                        <input id="upload-@item.CaseId" class="student-evidence-input" type="file" name="uploadFiles" multiple />
+                                    </div>
+                                    <button type="submit" class="student-submit-button">Upload files</button>
+                                </form>
+                            </section>
+
+                            <section class="student-embedded-card student-evidence-pane">
+                                <div class="student-card-header">
+                                    <div>
+                                        <h2>Submitted evidence</h2>
+                                        <p class="student-card-subtitle">View and download the evidence already on file.</p>
+                                    </div>
+                                </div>
+
+                                @if (item.EvidenceFiles.Count == 0)
+                                {
+                                    <p class="student-empty-state">No evidence is currently attached to this case.</p>
+                                }
+                                else
+                                {
+                                    <ul class="evidence-list">
+                                        @foreach (var evidence in item.EvidenceFiles)
+                                        {
+                                            <li>
+                                                <div>
+                                                    <strong>@evidence.FileName</strong>
+                                                    <div class="student-field-copy">@evidence.UploadedByDisplayName - @evidence.UploadedUtcDisplay</div>
+                                                </div>
+                                                <a class="student-inline-link" asp-page="/Evidence/Download" asp-route-id="@evidence.Id">Download</a>
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                            </section>
+                        </div>
+                    </article>
+                }
+            </div>
+        }
+    </article>
+</section>

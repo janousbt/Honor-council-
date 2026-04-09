@@ -1,0 +1,84 @@
+@page "{caseId:int}"
+@model HonorCouncil_RazorPages.Pages.Admin.Hearings.ScheduleModel
+@{
+    ViewData["Title"] = "Schedule hearing";
+}
+
+<section class="page-shell">
+    <header class="page-header">
+        <div>
+            <p class="eyebrow">@Model.Details.CaseNumber</p>
+            <h1>Schedule hearing</h1>
+        </div>
+        <span class="badge badge-accent">@Model.Details.CourseDisplay</span>
+    </header>
+
+    <div class="panel-grid two-up">
+        <article class="panel">
+            <h2>Participants</h2>
+            <dl class="summary-grid">
+                <dt>Student</dt><dd>@Model.Details.StudentName - @Model.Details.StudentEmail</dd>
+                <dt>Faculty</dt><dd>@Model.Details.FacultyName - @Model.Details.FacultyEmail</dd>
+                <dt>Investigator</dt><dd>@(Model.Details.InvestigatorName is null ? "Not assigned" : $"{Model.Details.InvestigatorName} - {Model.Details.InvestigatorEmail}")</dd>
+            </dl>
+
+            <form method="post" asp-page-handler="RequestAvailability" class="form-grid admin-hearing-request-form">
+                <input type="hidden" asp-for="RequestInput.CaseId" />
+                <button type="submit" class="button button-primary">Request availability</button>
+            </form>
+        </article>
+
+        <article class="panel">
+            <h2>Availability on file</h2>
+            <p class="page-note">This section reflects the student's uploaded class schedule.</p>
+            @if (Model.Details.StudentScheduleFiles.Count == 0)
+            {
+                <p class="empty-state">No class schedule has been uploaded yet.</p>
+            }
+            else
+            {
+                <ul class="summary-list">
+                    @foreach (var schedule in Model.Details.StudentScheduleFiles)
+                    {
+                        <li>
+                            <strong>@schedule.FileName</strong> by @schedule.UploadedBy on @schedule.UploadedUtcDisplay
+                            <a asp-page="/Schedule/Download" asp-route-id="@schedule.Id">Download</a>
+                        </li>
+                    }
+                </ul>
+            }
+        </article>
+    </div>
+
+    <article class="panel">
+        <form method="post" asp-page-handler="Schedule" class="form-grid">
+            <input type="hidden" asp-for="Input.CaseId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-grid two-up">
+                <div class="field-group">
+                    <label asp-for="Input.ScheduledLocal"></label>
+                    <input asp-for="Input.ScheduledLocal" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm}" step="300" />
+                    <span asp-validation-for="Input.ScheduledLocal" class="text-danger"></span>
+                </div>
+                <div class="field-group">
+                    <label asp-for="Input.HearingFormat"></label>
+                    <select asp-for="Input.HearingFormat" asp-items="Model.FormatOptions"></select>
+                    <span asp-validation-for="Input.HearingFormat" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="field-group">
+                <label asp-for="Input.LocationOrMeetingLink"></label>
+                <input asp-for="Input.LocationOrMeetingLink" />
+            </div>
+            <div class="field-group">
+                <label asp-for="Input.Notes"></label>
+                <textarea asp-for="Input.Notes" rows="3"></textarea>
+            </div>
+            <button type="submit" class="button button-primary">Save hearing schedule</button>
+        </form>
+    </article>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

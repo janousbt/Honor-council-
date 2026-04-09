@@ -1,0 +1,140 @@
+@page "{id:int}"
+@model HonorCouncil_RazorPages.Pages.Faculty.Cases.DetailsModel
+@{
+    ViewData["Title"] = "Case details";
+}
+
+<section class="page-shell">
+    <header class="page-header">
+        <div>
+            <p class="eyebrow">Case @Model.CaseDetail.CaseNumber</p>
+            <h1>Case detail</h1>
+        </div>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <span class="badge badge-danger">@Model.CaseDetail.PriorityLabel</span>
+            <span class="badge @(Model.CaseDetail.ReportType == ReportType.Formal ? "badge-accent" : "badge-warning")">@Model.CaseDetail.ReportType</span>
+            <span class="badge @(Model.CaseDetail.IsWithinFormalWindow ? "badge-success" : "badge-danger")">
+                @(Model.CaseDetail.IsWithinFormalWindow ? "Within 90 days" : "Outside 90 days")
+            </span>
+        </div>
+    </header>
+
+    @if (!string.IsNullOrWhiteSpace(Model.StatusMessage))
+    {
+        <article class="panel">
+            <p class="page-note">@Model.StatusMessage</p>
+        </article>
+    }
+
+    <div class="case-detail-grid faculty-detail-grid-main">
+        <div class="case-detail-column">
+            <article class="panel">
+                <h2>Student</h2>
+                <dl class="summary-grid">
+                    <dt>Name</dt><dd>@Model.CaseDetail.StudentName</dd>
+                    <dt>Student ID</dt><dd>@Model.CaseDetail.StudentNumber</dd>
+                    <dt>Email</dt><dd>@Model.CaseDetail.StudentEmail</dd>
+                    <dt>Year</dt><dd>@Model.CaseDetail.StudentAcademicYear</dd>
+                </dl>
+            </article>
+
+            <article class="panel">
+                <h2>Witnesses</h2>
+                @if (Model.CaseDetail.Witnesses.Count == 0)
+                {
+                    <p class="empty-state">No witnesses listed for this case.</p>
+                }
+                else
+                {
+                    <ul class="summary-list">
+                        @foreach (var witness in Model.CaseDetail.Witnesses)
+                        {
+                            <li>@witness.FullName @(string.IsNullOrWhiteSpace(witness.Email) ? "" : $"- {witness.Email}")</li>
+                        }
+                    </ul>
+                }
+            </article>
+
+            <article class="panel">
+                <h2>Case status timeline</h2>
+                <ul class="summary-list">
+                    @foreach (var item in Model.CaseDetail.Timeline)
+                    {
+                        <li>
+                            <strong>@item.Title</strong> - @item.WhenDisplay
+                            @if (!string.IsNullOrWhiteSpace(item.Notes))
+                            {
+                                <div><small>@item.Notes</small></div>
+                            }
+                        </li>
+                    }
+                </ul>
+            </article>
+        </div>
+
+        <div class="case-detail-column">
+            <article class="panel">
+                <h2>Violation details</h2>
+                <dl class="summary-grid">
+                    <dt>Date of violation</dt><dd>@Model.CaseDetail.ViolationDate.ToString("MMMM d, yyyy")</dd>
+                    <dt>Date filed</dt><dd>@Model.CaseDetail.FiledUtc.ToLocalTime().ToString("MMMM d, yyyy")</dd>
+                    <dt>Status</dt><dd>@Model.CaseDetail.StatusDisplay</dd>
+                    <dt>Course</dt><dd>@Model.CaseDetail.CourseDisplay</dd>
+                    <dt>Hearing</dt>
+                    <dd>
+                        @if (Model.CaseDetail.ScheduledStartUtc.HasValue)
+                        {
+                            @Model.CaseDetail.ScheduledStartUtc.Value.ToLocalTime().ToString("MMMM d, yyyy h:mm tt")
+                            @if (Model.CaseDetail.HearingFormat.HasValue)
+                            {
+                                <text> (@(Model.CaseDetail.HearingFormat == HearingFormat.InPerson ? "In Person" : Model.CaseDetail.HearingFormat.Value.ToString()))</text>
+                            }
+                        }
+                        else
+                        {
+                            <text>Not scheduled</text>
+                        }
+                    </dd>
+                    @if (!string.IsNullOrWhiteSpace(Model.CaseDetail.LocationOrMeetingLink))
+                    {
+                        <dt>Location</dt><dd>@Model.CaseDetail.LocationOrMeetingLink</dd>
+                    }
+                    <dt>Outcome</dt><dd>@(string.IsNullOrWhiteSpace(Model.CaseDetail.OutcomeSummary) ? "Pending" : Model.CaseDetail.OutcomeSummary)</dd>
+                    @if (Model.CaseDetail.ReportType == ReportType.Formal)
+                    {
+                        <dt>Investigator</dt><dd>@(Model.CaseDetail.InvestigatorName ?? "Pending assignment")</dd>
+                    }
+                </dl>
+                <p>@Model.CaseDetail.Description</p>
+            </article>
+
+            <article class="panel">
+                <h2>Evidence on file</h2>
+                <form method="post" enctype="multipart/form-data" asp-page-handler="UploadEvidence" asp-route-id="@Model.CaseDetail.CaseId" class="form-grid case-evidence-upload-form">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="field-group case-evidence-upload-field">
+                        <label for="faculty-evidence-upload">Upload evidence</label>
+                        <input id="faculty-evidence-upload" class="case-evidence-file-input" type="file" name="uploadFiles" multiple />
+                    </div>
+                    <button type="submit" class="button button-primary case-evidence-upload-button">Upload files</button>
+                </form>
+                @if (Model.CaseDetail.EvidenceFiles.Count == 0)
+                {
+                    <p class="empty-state">No evidence uploaded yet.</p>
+                }
+                else
+                {
+                    <ul class="summary-list">
+                        @foreach (var evidence in Model.CaseDetail.EvidenceFiles)
+                        {
+                            <li>
+                                <strong>@evidence.FileName</strong> by @evidence.UploadedBy (@evidence.UploadedByRole) on @evidence.UploadedUtcDisplay
+                                <a asp-page="/Evidence/Download" asp-route-id="@evidence.Id">Download</a>
+                            </li>
+                        }
+                    </ul>
+                }
+            </article>
+        </div>
+    </div>
+</section>

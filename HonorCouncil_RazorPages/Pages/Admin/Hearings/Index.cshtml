@@ -1,0 +1,80 @@
+@page
+@model HonorCouncil_RazorPages.Pages.Admin.Hearings.IndexModel
+@{
+    ViewData["Title"] = "Hearings";
+}
+
+<section class="page-shell">
+    <header class="page-header">
+        <div>
+            <p class="eyebrow">Scheduling</p>
+            <h1>Hearings</h1>
+        </div>
+        <span class="badge badge-info">Formal case workflow</span>
+    </header>
+
+    <article class="panel">
+        <div class="panel-heading">
+            <h2>Needs scheduling</h2>
+            <span class="badge badge-warning">@Model.Queue.NeedScheduling.Count case(s)</span>
+        </div>
+        @if (Model.Queue.NeedScheduling.Count == 0)
+        {
+            <p class="empty-state">No formal cases are currently waiting for hearing scheduling.</p>
+        }
+        else
+        {
+            <div class="table-like">
+                <div class="table-row header">
+                    <div>Case</div>
+                    <div>Course</div>
+                    <div>Status</div>
+                    <div>Action</div>
+                </div>
+                @foreach (var item in Model.Queue.NeedScheduling)
+                {
+                    <div class="table-row">
+                        <div>@item.CaseNumber<br/><small>@item.StudentName</small></div>
+                        <div>@item.CourseDisplay</div>
+                        <div><span class="badge badge-warning">@item.StatusDisplay</span></div>
+                        <div><a asp-page="/Admin/Hearings/Schedule" asp-route-caseId="@item.CaseId">Schedule</a></div>
+                    </div>
+                }
+            </div>
+        }
+    </article>
+
+    <article class="panel">
+        <div class="panel-heading">
+            <h2>Scheduled hearings</h2>
+            <span class="badge badge-success">@Model.Queue.ScheduledHearings.Count hearing(s)</span>
+        </div>
+        @if (Model.Queue.ScheduledHearings.Count == 0)
+        {
+            <p class="empty-state">No hearings have been scheduled yet.</p>
+        }
+        else
+        {
+            <div class="table-like">
+                <div class="table-row header">
+                    <div>Case</div>
+                    <div>Course</div>
+                    <div>Scheduled</div>
+                    <div>Action</div>
+                </div>
+                @foreach (var item in Model.Queue.ScheduledHearings)
+                {
+                    <div class="table-row">
+                        <div>@item.CaseNumber<br/><small>@item.StudentName</small></div>
+                        <div>@item.CourseDisplay</div>
+                        <div>
+                            @(item.ScheduledStartUtc?.ToLocalTime().ToString("MMMM d, yyyy h:mm tt"))<br/>
+                            <small>@(item.HearingFormat == HearingFormat.InPerson ? "In Person" : item.HearingFormat?.ToString())</small>
+                        </div>
+                        <div><a asp-page="/Admin/Hearings/Schedule" asp-route-caseId="@item.CaseId">Edit</a></div>
+                    </div>
+                }
+            </div>
+        }
+    </article>
+</section>

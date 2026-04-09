@@ -1,0 +1,62 @@
+@page
+@model HonorCouncil_RazorPages.Pages.Student.Appeals.IndexModel
+@{
+    ViewData["Title"] = "Appeals";
+}
+
+<section class="student-page-shell">
+    <article class="student-card student-card-wide">
+        <div class="student-card-header">
+            <div>
+                <h1>My Appeals</h1>
+                <p class="student-card-subtitle">View formal outcomes and submit an appeal when eligible.</p>
+            </div>
+        </div>
+
+        <p class="student-inline-note">Appeal deadline enforcement will be enabled when the academic calendar is integrated.</p>
+
+        @if (Model.AppealCases.Count == 0)
+        {
+            <p class="student-empty-state">No formal outcomes are currently available for appeal.</p>
+        }
+        else
+        {
+            <div class="student-case-stack">
+                @foreach (var item in Model.AppealCases)
+                {
+                    <article class="student-case-card">
+                        <div class="student-case-header">
+                            <div>
+                                <div class="student-case-number">Case @item.CaseNumber</div>
+                                <div class="student-case-course">@item.CourseDisplay</div>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: flex-end;">
+                                <span class="student-status-pill">Formal violation</span>
+                                @if (item.HasAppeal)
+                                {
+                                    <span class="student-status-pill">@item.AppealStatusDisplay</span>
+                                }
+                            </div>
+                        </div>
+
+                        <p class="student-case-outcome"><strong>Outcome:</strong> @item.OutcomeSummary</p>
+                        <p class="student-inline-note">
+                            Outcome issued: @item.OutcomeIssuedUtc?.ToLocalTime().ToString("MMMM d, yyyy")
+                        </p>
+
+                        <div class="student-case-actions">
+                            @if (item.CanAppeal)
+                            {
+                                <a class="student-inline-link" asp-page="/Student/Appeals/Create" asp-route-caseId="@item.CaseId">File appeal</a>
+                            }
+                            else
+                            {
+                                <span class="student-inline-note">Appeal: @item.AppealStatusDisplay</span>
+                            }
+                        </div>
+                    </article>
+                }
+            </div>
+        }
+    </article>
+</section>

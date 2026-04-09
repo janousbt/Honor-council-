@@ -1,0 +1,38 @@
+@page
+@model HonorCouncil_RazorPages.Pages.Admin.LoginModel
+@{
+    ViewData["Title"] = "Sign in";
+}
+
+<section class="page-shell single-column" style="max-width: 560px; margin: 2rem auto;">
+    <article class="panel">
+        <header class="page-header" style="margin-bottom: 1rem;">
+            <div>
+                <p class="eyebrow">Honor Council</p>
+                <h1>Sign in</h1>
+            </div>
+        </header>
+
+        <form method="post" class="form-grid">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="field-group">
+                <label asp-for="Input.Email"></label>
+                <input asp-for="Input.Email" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+
+            <div class="field-group">
+                <label asp-for="Input.Password"></label>
+                <input asp-for="Input.Password" type="password" />
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="button button-primary">Sign in</button>
+        </form>
+    </article>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

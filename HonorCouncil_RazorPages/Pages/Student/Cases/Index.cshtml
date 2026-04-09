@@ -1,0 +1,187 @@
+@page
+@model HonorCouncil_RazorPages.Pages.Student.Cases.IndexModel
+@{
+    ViewData["Title"] = "My cases";
+}
+
+<section class="student-dashboard student-my-cases-layout">
+    <div class="student-dashboard-column">
+        <article class="student-card">
+            <div class="student-card-header">
+                <h1>My Active Cases</h1>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.StatusMessage))
+            {
+                <p class="student-inline-note">@Model.StatusMessage</p>
+            }
+
+            @if (Model.Cases.Count == 0)
+            {
+                <p class="student-empty-state">No active cases are currently on file for your account.</p>
+            }
+            else
+            {
+                <div class="student-case-stack">
+                    @foreach (var item in Model.Cases)
+                    {
+                        var timelineItems = item.Timeline;
+
+                        <article class="student-case-card">
+                            <div class="student-case-header">
+                                <div>
+                                    <div class="student-case-number">Case @item.CaseNumber</div>
+                                    <div class="student-case-course">@item.CourseDisplay</div>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: flex-end;">
+                                    <span class="student-status-pill">@item.ReportTypeDisplay</span>
+                                    <span class="student-status-pill">@item.StatusDisplay</span>
+                                </div>
+                            </div>
+
+                            @if (timelineItems.Count > 0)
+                            {
+                                <ol class="student-progress-list">
+                                    @foreach (var timelineItem in timelineItems)
+                                    {
+                                        <li class="student-progress-item @timelineItem.State">
+                                            <span class="student-progress-dot" aria-hidden="true"></span>
+                                            <span>
+                                                @timelineItem.Title
+                                                @if (!string.IsNullOrWhiteSpace(timelineItem.Detail))
+                                                {
+                                                    <small style="display: block;">@timelineItem.Detail</small>
+                                                }
+                                            </span>
+                                        </li>
+                                    }
+                                </ol>
+                            }
+
+                            @if (!string.IsNullOrWhiteSpace(item.OutcomeSummary))
+                            {
+                                <p class="student-case-outcome"><strong>Outcome:</strong> @item.OutcomeSummary</p>
+                            }
+
+                            <div class="student-case-actions">
+                                @if (item.CanAppeal)
+                                {
+                                    <a class="student-inline-link" asp-page="/Student/Appeals/Create" asp-route-caseId="@item.CaseId">File appeal</a>
+                                }
+                                else if (item.HasAppeal)
+                                {
+                                    <span class="student-inline-note">Appeal: @item.AppealStatusDisplay</span>
+                                }
+                            </div>
+                        </article>
+                    }
+                </div>
+            }
+        </article>
+
+        <article class="student-card student-action-card">
+            <div class="student-card-header">
+                <h2>My Evidence Submission</h2>
+            </div>
+            <div class="student-upload-panel student-upload-wireframe">
+                <div class="student-upload-box">
+                    <div class="student-upload-title">
+                        Upload evidence <a asp-page="/Student/Evidence/Index">browse</a>
+                    </div>
+                    <div class="student-upload-note">PDF, DOCX, PNG - max 25 MB</div>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <div class="student-dashboard-column student-my-cases-side">
+        <article class="student-card student-action-card">
+            <div class="student-card-header">
+                <h2>Add Witnesses</h2>
+            </div>
+            <form method="post" asp-page-handler="AddWitness" class="student-form-panel student-dashboard-form">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="field-group">
+                    <label class="student-field-label" asp-for="WitnessInput.CaseId"></label>
+                    <select asp-for="WitnessInput.CaseId">
+                        @foreach (var item in Model.Cases)
+                        {
+                            <option value="@item.CaseId">@item.CaseNumber - @item.CourseDisplay</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="field-group">
+                    <label class="student-field-label" asp-for="WitnessInput.FullName"></label>
+                    <input asp-for="WitnessInput.FullName" placeholder="Full name" />
+                    <span asp-validation-for="WitnessInput.FullName" class="text-danger"></span>
+                </div>
+
+                <div class="field-group">
+                    <label class="student-field-label" asp-for="WitnessInput.Email"></label>
+                    <input asp-for="WitnessInput.Email" placeholder="witness@@email.com" />
+                    <span asp-validation-for="WitnessInput.Email" class="text-danger"></span>
+                </div>
+
+                <div class="field-group">
+                    <label class="student-field-label" asp-for="WitnessInput.Affiliation"></label>
+                    <input asp-for="WitnessInput.Affiliation" placeholder="Faculty, student, staff, etc." />
+                </div>
+
+                <button type="submit" class="button button-primary">Add witness</button>
+            </form>
+
+            @{
+                var witnessGroups = Model.Cases
+                    .Where(x => x.Witnesses.Count > 0)
+                    .Select(x => new
+                    {
+                        x.CaseNumber,
+                        x.CourseDisplay,
+                        Witnesses = x.Witnesses.OrderBy(w => w.FullName).ToList()
+                    })
+                    .ToList();
+            }
+
+            @if (witnessGroups.Count > 0)
+            {
+                <div class="student-witness-groups">
+                    @foreach (var group in witnessGroups)
+                    {
+                        <section class="student-witness-group">
+                            <div class="student-witness-group-header">
+                                <div>
+                                    <div class="student-case-number">Case @group.CaseNumber</div>
+                                    <div class="student-case-course">@group.CourseDisplay</div>
+                                </div>
+                                <span class="student-status-pill">Witnesses</span>
+                            </div>
+
+                            <div class="student-witness-list">
+                                @foreach (var witness in group.Witnesses)
+                                {
+                                    <article class="student-witness-card">
+                                        <div class="student-witness-name">@witness.FullName</div>
+                                        @if (!string.IsNullOrWhiteSpace(witness.Email))
+                                        {
+                                            <div class="student-witness-meta">@witness.Email</div>
+                                        }
+                                        @if (!string.IsNullOrWhiteSpace(witness.Affiliation))
+                                        {
+                                            <div class="student-witness-tag">@witness.Affiliation</div>
+                                        }
+                                    </article>
+                                }
+                            </div>
+                        </section>
+                    }
+                </div>
+            }
+        </article>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

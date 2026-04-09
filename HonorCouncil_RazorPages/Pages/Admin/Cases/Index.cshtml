@@ -1,0 +1,81 @@
+@page
+@model HonorCouncil_RazorPages.Pages.Admin.Cases.IndexModel
+@{
+    ViewData["Title"] = "Cases";
+}
+
+<section class="page-shell">
+    <header class="page-header">
+        <div>
+            <p class="eyebrow">Honor Council</p>
+            <h1>Case queue</h1>
+        </div>
+        <form method="get" class="page-header" style="gap: 0.75rem;">
+            <select name="statusFilter">
+                <option value="">All statuses</option>
+                @foreach (var option in Model.StatusOptions)
+                {
+                    <option value="@option" selected="@(Model.Queue.StatusFilter == option)">@option</option>
+                }
+            </select>
+            <select name="sort">
+                <option value="">Priority/default</option>
+                <option value="student" selected="@(Model.Queue.Sort == "student")">Student</option>
+                <option value="course" selected="@(Model.Queue.Sort == "course")">Course</option>
+                <option value="status" selected="@(Model.Queue.Sort == "status")">Status</option>
+            </select>
+            <button type="submit" class="button button-ghost">Apply</button>
+        </form>
+    </header>
+
+    <article class="panel">
+@if (Model.Queue.Cases.Count == 0)
+        {
+            <p class="empty-state">No cases match the current filters.</p>
+        }
+        else
+        {
+            <div class="table-like">
+                <div class="table-row header">
+                    <div>Student</div>
+                    <div>Course</div>
+                    <div>Status</div>
+                    <div>Action</div>
+                </div>
+                @foreach (var item in Model.Queue.Cases)
+                {
+                    var priorityBadgeClass = item.PriorityLabel.ToLowerInvariant() switch
+                    {
+                        var label when label.Contains("second") || label.Contains("senior") || label.Contains("high") || label.Contains("urgent") => "badge-danger",
+                        var label when label.Contains("formal") || label.Contains("review") || label.Contains("priority") => "badge-warning",
+                        _ => "badge-info"
+                    };
+
+                    <div class="table-row">
+                        <div>
+                            <strong>@item.StudentName</strong><br/>
+                            <small>@item.StudentNumber - @item.AcademicYear</small><br/>
+                            <small>@item.CaseNumber</small><br/>
+                            <span class="badge @priorityBadgeClass">@item.PriorityLabel</span>
+                        </div>
+                        <div>
+                            <strong>@item.CourseTitle</strong><br/>
+                            <small>@item.CourseNumber</small><br/>
+                            <span class="badge @(item.ReportType == ReportType.Formal ? "badge-accent" : "badge-warning")">@item.ReportType</span>
+                        </div>
+                        <div>
+                            <span class="badge @(item.InvestigatorName is null ? "badge-warning" : "badge-info")">@item.StatusDisplay</span><br/>
+                            @if (item.ReportType == ReportType.Formal)
+                            {
+                                <small>@(item.InvestigatorName ?? "No investigator assigned")</small>
+                            }
+                        </div>
+                        <div>
+                            <a asp-page="/Admin/Cases/Details" asp-route-id="@item.CaseId">View</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </article>
+</section>

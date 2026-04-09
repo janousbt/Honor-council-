@@ -1,0 +1,69 @@
+@page "{caseNumber}"
+@model HonorCouncil_RazorPages.Pages.Reports.ConfirmationModel
+@{
+    ViewData["Title"] = "Report submitted";
+}
+
+<section class="page-shell single-column" style="max-width: 840px; margin: 0 auto;">
+    <header class="page-header">
+        <div>
+            <p class="eyebrow">Submission Complete</p>
+            <h1>Report submitted successfully</h1>
+        </div>
+        <span class="badge @(Model.ReportType == ReportType.Formal ? "badge-accent" : "badge-warning")">@Model.ReportType</span>
+    </header>
+
+    <article class="panel">
+        <div class="panel-heading">
+            <h2>Submission summary</h2>
+            <span class="badge @(Model.IsWithinFormalWindow ? "badge-success" : "badge-danger")">
+                @(Model.IsWithinFormalWindow ? "Within policy window" : "Outside policy window")
+            </span>
+        </div>
+
+        <dl class="summary-grid">
+            <dt>Confirmation ID</dt>
+            <dd>@Model.CaseNumber</dd>
+            <dt>Report ID</dt>
+            <dd>@Model.ReportNumber</dd>
+            <dt>Filed by</dt>
+            <dd>@Model.FiledBy</dd>
+            <dt>Student</dt>
+            <dd>@Model.StudentDisplay</dd>
+            <dt>Date filed</dt>
+            <dd>@Model.FiledDateDisplay</dd>
+            <dt>Date of violation</dt>
+            <dd>@Model.ViolationDateDisplay</dd>
+            <dt>Sent to</dt>
+            <dd>@string.Join(", ", Model.Recipients)</dd>
+        </dl>
+    </article>
+
+    <article class="panel">
+        <div class="panel-heading">
+            <h2>Evidence on file</h2>
+            <span class="badge badge-info">@Model.EvidenceFiles.Count file(s)</span>
+        </div>
+
+        @if (Model.EvidenceFiles.Count == 0)
+        {
+            <p class="empty-state">No evidence files were attached to this submission.</p>
+        }
+        else
+        {
+            <ul class="summary-list">
+                @foreach (var file in Model.EvidenceFiles)
+                {
+                    <li>
+                        @file.FileName
+                        <a asp-page="/Evidence/Download" asp-route-id="@file.Id">Download</a>
+                    </li>
+                }
+            </ul>
+        }
+    </article>
+
+    <div class="page-header">
+        <a class="button button-ghost" asp-page="/Index">File another report</a>
+    </div>
+</section>

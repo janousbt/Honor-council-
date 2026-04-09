@@ -1,0 +1,102 @@
+@page
+@model HonorCouncil_RazorPages.Pages.Admin.Archive.IndexModel
+@{
+    ViewData["Title"] = "Archive";
+}
+
+<section class="page-shell">
+    <header class="page-header">
+        <div>
+            <p class="eyebrow">Honor Council</p>
+            <h1>Resolved case archive</h1>
+        </div>
+    </header>
+
+    <article class="panel">
+        <div class="panel-heading">
+            <h2>Formal violations</h2>
+            <span class="badge badge-accent">@Model.Archive.FormalCases.Count case(s)</span>
+        </div>
+        @if (Model.Archive.FormalCases.Count == 0)
+        {
+            <p class="empty-state">No finalized formal cases have been archived yet.</p>
+        }
+        else
+        {
+            <div class="table-like">
+                <div class="table-row header">
+                    <div>Case</div>
+                    <div>Course</div>
+                    <div>Resolution</div>
+                    <div>Action</div>
+                </div>
+                @foreach (var item in Model.Archive.FormalCases)
+                {
+                    <div class="table-row">
+                        <div>
+                            <strong>@item.StudentName</strong><br />
+                            <small>@item.StudentNumber</small><br />
+                            <small>@item.CaseNumber</small><br />
+                            <span class="badge @(item.ReportType == ReportType.Formal ? "badge-accent" : "badge-warning")">@item.ReportType</span>
+                        </div>
+                        <div>
+                            <strong>@item.CourseDisplay</strong>
+                        </div>
+                        <div>
+                            <span class="badge badge-success">@item.StatusDisplay</span><br />
+                            <small>Resolved @item.ResolvedUtc.ToLocalTime().ToString("MMMM d, yyyy")</small><br />
+                            <small>@(string.IsNullOrWhiteSpace(item.OutcomeSummary) ? "No outcome summary recorded." : item.OutcomeSummary)</small>
+                        </div>
+                        <div>
+                            <a asp-page="/Admin/Cases/Details" asp-route-id="@item.CaseId">View</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </article>
+
+    <article class="panel">
+        <div class="panel-heading">
+            <h2>Informal violations</h2>
+            <span class="badge badge-warning">@Model.Archive.InformalCases.Count case(s)</span>
+        </div>
+        @if (Model.Archive.InformalCases.Count == 0)
+        {
+            <p class="empty-state">No finalized informal cases have been archived yet.</p>
+        }
+        else
+        {
+            <div class="table-like">
+                <div class="table-row header">
+                    <div>Case</div>
+                    <div>Course</div>
+                    <div>Resolution</div>
+                    <div>Action</div>
+                </div>
+                @foreach (var item in Model.Archive.InformalCases)
+                {
+                    <div class="table-row">
+                        <div>
+                            <strong>@item.StudentName</strong><br />
+                            <small>@item.StudentNumber</small><br />
+                            <small>@item.CaseNumber</small><br />
+                            <span class="badge badge-warning">@item.ReportType</span>
+                        </div>
+                        <div>
+                            <strong>@item.CourseDisplay</strong>
+                        </div>
+                        <div>
+                            <span class="badge badge-success">@item.StatusDisplay</span><br />
+                            <small>Resolved @item.ResolvedUtc.ToLocalTime().ToString("MMMM d, yyyy")</small><br />
+                            <small>@(string.IsNullOrWhiteSpace(item.OutcomeSummary) ? "No outcome summary recorded." : item.OutcomeSummary)</small>
+                        </div>
+                        <div>
+                            <a asp-page="/Admin/Cases/Details" asp-route-id="@item.CaseId">View</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </article>
+</section>

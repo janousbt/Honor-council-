@@ -1,0 +1,181 @@
+is_global = true
+build_property.TargetFramework = net9.0
+build_property.TargetFramework = net9.0
+build_property.TargetPlatformMinVersion = 
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = HonorCouncil_RazorPages
+build_property.RootNamespace = HonorCouncil_RazorPages
+build_property.ProjectDir = C:\Users\edagn\OneDrive\Desktop\CIS484\Honor Council Project\HonorCouncil_RazorPages\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 9.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\edagn\OneDrive\Desktop\CIS484\Honor Council Project\HonorCouncil_RazorPages
+build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 9.0
+build_property.EnableCodeStyleSeverity = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Account/Logout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWNjb3VudFxMb2dvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Admin/Appeals/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cQXBwZWFsc1xEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Admin/Appeals/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cQXBwZWFsc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Admin/Archive/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cQXJjaGl2ZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Admin/Cases/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cQ2FzZXNcRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Admin/Cases/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cQ2FzZXNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Admin/Dashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cRGFzaGJvYXJkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Admin/Evidence/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cRXZpZGVuY2VcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Admin/Hearings/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cSGVhcmluZ3NcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Admin/Hearings/Schedule.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cSGVhcmluZ3NcU2NoZWR1bGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Admin/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cTG9naW4uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Evidence/Download.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXZpZGVuY2VcRG93bmxvYWQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Faculty/Cases/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRmFjdWx0eVxDYXNlc1xEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Faculty/Dashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRmFjdWx0eVxEYXNoYm9hcmQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Reports/Confirmation.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVwb3J0c1xDb25maXJtYXRpb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Reports/Formal/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVwb3J0c1xGb3JtYWxcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Reports/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVwb3J0c1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Reports/Informal/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVwb3J0c1xJbmZvcm1hbFxDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Schedule/Download.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2NoZWR1bGVcRG93bmxvYWQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Shared/_AdminSidebar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9BZG1pblNpZGViYXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Shared/_CaseTimeline.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9DYXNlVGltZWxpbmUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Shared/_EvidenceList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9FdmlkZW5jZUxpc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Shared/_FacultySidebar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9GYWN1bHR5U2lkZWJhci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Shared/_StatusBadge.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9TdGF0dXNCYWRnZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Shared/_StudentSidebar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9TdHVkZW50U2lkZWJhci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Student/Appeals/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3R1ZGVudFxBcHBlYWxzXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Student/Appeals/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3R1ZGVudFxBcHBlYWxzXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Student/Availability/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3R1ZGVudFxBdmFpbGFiaWxpdHlcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Student/Cases/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3R1ZGVudFxDYXNlc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Student/Evidence/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3R1ZGVudFxFdmlkZW5jZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Student/Schedule/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3R1ZGVudFxTY2hlZHVsZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/edagn/OneDrive/Desktop/CIS484/Honor Council Project/HonorCouncil_RazorPages/Pages/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-23vljfdcml

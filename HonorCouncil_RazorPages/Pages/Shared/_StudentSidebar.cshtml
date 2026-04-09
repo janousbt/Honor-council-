@@ -1,0 +1,16 @@
+@{
+    var currentPath = ViewContext.HttpContext.Request.Path.Value ?? string.Empty;
+    var onCases = currentPath.StartsWith("/Student/Cases", StringComparison.OrdinalIgnoreCase);
+    var onAppeals = currentPath.StartsWith("/Student/Appeals", StringComparison.OrdinalIgnoreCase);
+    var onEvidence = currentPath.StartsWith("/Student/Evidence", StringComparison.OrdinalIgnoreCase);
+    var onSchedule = currentPath.StartsWith("/Student/Schedule", StringComparison.OrdinalIgnoreCase);
+    var onReports = currentPath.StartsWith("/Reports", StringComparison.OrdinalIgnoreCase);
+}
+
+<nav class="nav-stack student-nav-stack">
+    <a class="nav-link-panel @(onCases ? "active" : string.Empty)" asp-page="/Student/Cases/Index">My cases</a>
+    <a class="nav-link-panel @(onEvidence ? "active" : string.Empty)" asp-page="/Student/Evidence/Index">My evidence</a>
+    <a class="nav-link-panel @(onSchedule ? "active" : string.Empty)" asp-page="/Student/Schedule/Index">Upload schedule</a>
+    <a class="nav-link-panel @(onAppeals ? "active" : string.Empty)" asp-page="/Student/Appeals/Index">Appeals</a>
+    <a class="nav-link-panel @(onReports ? "active" : string.Empty)" asp-page="/Reports/Index">Report a violation</a>
+</nav>

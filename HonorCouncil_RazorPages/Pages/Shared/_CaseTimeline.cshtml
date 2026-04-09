@@ -1,0 +1,8 @@
+@model IReadOnlyList<string>
+
+<ol class="timeline-list">
+    @foreach (var item in Model)
+    {
+        <li>@item</li>
+    }
+</ol>

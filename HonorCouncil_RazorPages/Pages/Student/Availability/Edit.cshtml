@@ -1,0 +1,69 @@
+@page "{caseId:int?}"
+@model HonorCouncil_RazorPages.Pages.Student.Availability.EditModel
+@{
+    ViewData["Title"] = "Availability";
+}
+
+<section class="student-page-shell">
+    <article class="student-card student-card-wide">
+        <div class="student-card-header">
+            <div>
+                <h1>My Evidence Submission</h1>
+                <p class="student-card-subtitle">Select a case and submit your available hearing window.</p>
+            </div>
+        </div>
+
+        @if (Model.AvailableCases.Count == 0)
+        {
+            <p class="student-empty-state">No formal cases are currently available for scheduling.</p>
+        }
+        else
+        {
+            <div class="student-availability-grid">
+                <form method="get" class="student-card student-embedded-card">
+                    <div class="student-card-header">
+                        <h2>Choose Case</h2>
+                    </div>
+
+                    <div class="field-group">
+                        <label for="caseId">Case</label>
+                        <select id="caseId" name="caseId" onchange="this.form.submit()">
+                            @foreach (var item in Model.AvailableCases)
+                            {
+                                <option value="@item.CaseId" selected="@(Model.Input.CaseId == item.CaseId)">@item.Label</option>
+                            }
+                        </select>
+                    </div>
+                </form>
+
+                @if (Model.Input.CaseId > 0)
+                {
+                    <form method="post" class="student-card student-embedded-card form-grid">
+                        <div class="student-card-header">
+                            <h2>Submit Availability</h2>
+                        </div>
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Input.CaseId" />
+
+                        <div class="field-group">
+                            <label asp-for="Input.StartLocal"></label>
+                            <input asp-for="Input.StartLocal" type="datetime-local" />
+                        </div>
+
+                        <div class="field-group">
+                            <label asp-for="Input.EndLocal"></label>
+                            <input asp-for="Input.EndLocal" type="datetime-local" />
+                        </div>
+
+                        <button type="submit" class="student-submit-button student-submit-button-full">Submit availability</button>
+                    </form>
+                }
+            </div>
+        }
+    </article>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,58 @@
+@page "{caseId:int}"
+@model HonorCouncil_RazorPages.Pages.Student.Appeals.CreateModel
+@{
+    ViewData["Title"] = "File appeal";
+}
+
+<section class="student-page-shell">
+    <article class="student-card student-card-wide">
+        <div class="student-card-header">
+            <div>
+                <h1>Appeal a Formal Outcome</h1>
+                <p class="student-card-subtitle">@Model.AppealPage.CaseNumber</p>
+            </div>
+            <span class="student-status-pill">@(Model.AppealPage.HasExistingAppeal ? Model.AppealPage.ExistingAppealStatus?.ToString() : "Formal outcome only")</span>
+        </div>
+
+        <p class="student-inline-note">@Model.AppealPage.AppealWindowMessage</p>
+
+        <div class="student-appeal-summary">
+            <div><strong>Student:</strong> @Model.AppealPage.StudentName</div>
+            <div><strong>Course:</strong> @Model.AppealPage.CourseDisplay</div>
+            <div><strong>Outcome:</strong> @Model.AppealPage.OutcomeSummary</div>
+            <div><strong>Issued:</strong> @Model.AppealPage.OutcomeIssuedUtc?.ToLocalTime().ToString("MMMM d, yyyy")</div>
+        </div>
+
+        @if (Model.AppealPage.HasExistingAppeal)
+        {
+            <p class="student-empty-state">An appeal has already been filed for this case. Current status: @Model.AppealPage.ExistingAppealStatus</p>
+        }
+        else
+        {
+            <form method="post" class="student-form-grid">
+                <input type="hidden" asp-for="Input.CaseId" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="field-group">
+                    <label asp-for="Input.Grounds"></label>
+                    <select asp-for="Input.Grounds">
+                        <option>New evidence</option>
+                        <option>Due process concern</option>
+                        <option>Unreasonable decision</option>
+                    </select>
+                </div>
+
+                <div class="field-group">
+                    <label asp-for="Input.Description"></label>
+                    <textarea asp-for="Input.Description" rows="6"></textarea>
+                </div>
+
+                <button type="submit" class="student-submit-button student-submit-button-full">Submit appeal</button>
+            </form>
+        }
+    </article>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

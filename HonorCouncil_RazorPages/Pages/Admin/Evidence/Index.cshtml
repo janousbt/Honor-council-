@@ -1,0 +1,42 @@
+@page
+@model HonorCouncil_RazorPages.Pages.Admin.Evidence.IndexModel
+@{
+    ViewData["Title"] = "Evidence";
+}
+
+<section class="page-shell">
+    <article class="panel">
+        <h1>Evidence</h1>
+        @if (!Model.Cases.Any())
+        {
+            <p>No evidence has been uploaded yet.</p>
+        }
+        else
+        {
+            <div class="stack">
+                @foreach (var honorCase in Model.Cases)
+                {
+                    <section class="card">
+                        <div class="card-header">
+                            <div>
+                                <h2>@honorCase.CaseNumber</h2>
+                                <p>@honorCase.StudentName</p>
+                                <p>@honorCase.CourseDisplay</p>
+                            </div>
+                            <a class="button-link" asp-page="/Admin/Cases/Details" asp-route-id="@honorCase.CaseId">View case</a>
+                        </div>
+                        <ul class="list-reset">
+                            @foreach (var file in honorCase.Files)
+                            {
+                                <li>
+                                    <a asp-page="/Evidence/Download" asp-route-id="@file.Id">@file.FileName</a>
+                                    <span>Uploaded by @file.UploadedBy on @file.UploadedUtcDisplay</span>
+                                </li>
+                            }
+                        </ul>
+                    </section>
+                }
+            </div>
+        }
+    </article>
+</section>

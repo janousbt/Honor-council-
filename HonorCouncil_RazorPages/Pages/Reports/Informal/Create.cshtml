@@ -1,0 +1,631 @@
+@page
+@model HonorCouncil_RazorPages.Pages.Reports.Informal.CreateModel
+@{
+    ViewData["Title"] = "Informal report";
+    var reportDateValue = Model.Input.ReportDate == default ? DateTime.Today : Model.Input.ReportDate;
+    var earliestViolationDate = DateTime.Today.AddDays(-90).ToString("yyyy-MM-dd");
+}
+
+<style>
+    .informal-report-shell {
+        background: #ededed;
+        padding: 2.5rem 1rem 4rem;
+        min-height: calc(100vh - 80px);
+    }
+
+    .informal-report-document {
+        max-width: 860px;
+        margin: 0 auto;
+        background: #f9f9f9;
+        border: 2px solid #6d6d6d;
+        padding: 1.5rem 1.6rem 2.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        color: #171717;
+    }
+
+    .informal-report-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #9b9b9b;
+        margin-bottom: 1.1rem;
+    }
+
+    .informal-report-school {
+        margin: 0 0 0.75rem;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #1f1f1f;
+    }
+
+    .informal-report-title {
+        margin: 0;
+        color: #c28b00;
+        font-size: 2.05rem;
+        line-height: 1.05;
+        font-weight: 800;
+    }
+
+    .informal-report-logo {
+        min-width: 165px;
+        text-align: right;
+        color: #2d2d2d;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 0.7rem;
+        margin-top: 0.3rem;
+    }
+
+    .informal-report-logo-mark {
+        width: 54px;
+        height: 54px;
+        border: 2px solid #2d2d2d;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 1rem;
+        letter-spacing: 0.08em;
+    }
+
+    .informal-report-logo-text {
+        font-size: 0.95rem;
+        line-height: 1.05;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .informal-report-system-note {
+        margin: 0 0 1rem;
+        color: #d92d20;
+        font-size: 0.96rem;
+        font-weight: 700;
+    }
+
+    .informal-report-validation {
+        margin-bottom: 1rem;
+        color: #b42318;
+        font-size: 0.95rem;
+    }
+
+    .informal-report-section {
+        padding: 1rem 0 1.25rem;
+        border-bottom: 1px solid #a5a5a5;
+    }
+
+    .informal-report-section:last-of-type {
+        border-bottom: none;
+    }
+
+    .informal-report-section h2 {
+        margin: 0 0 1rem;
+        font-size: 1.55rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: #111;
+        letter-spacing: 0.01em;
+    }
+
+    .informal-report-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.9rem 1.2rem;
+    }
+
+    .informal-report-field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+    }
+
+    .informal-report-field.full {
+        grid-column: 1 / -1;
+    }
+
+    .informal-report-label {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #1f1f1f;
+    }
+
+    .informal-report-input,
+    .informal-report-textarea {
+        width: 100%;
+        border: 2px solid #7b7b7b;
+        border-radius: 0.5rem;
+        background: #fff;
+        padding: 0.72rem 0.9rem;
+        font-size: 0.98rem;
+        color: #1d1d1d;
+        box-sizing: border-box;
+    }
+
+    .informal-report-input[readonly] {
+        background: #f2f2f2;
+        color: #4b4b4b;
+    }
+
+    .informal-report-textarea {
+        min-height: 96px;
+        resize: vertical;
+    }
+
+    .informal-report-radio-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.2rem 1.8rem;
+        padding-top: 0.2rem;
+    }
+
+    .informal-report-radio-row label {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.98rem;
+        font-weight: 500;
+    }
+
+    .informal-report-rule {
+        margin: 0.2rem 0 0;
+        color: #d92d20;
+        font-size: 0.95rem;
+        font-weight: 500;
+    }
+
+    .informal-report-rule-error {
+        margin: 0.45rem 0 0;
+        color: #b42318;
+        font-size: 0.95rem;
+        font-weight: 700;
+    }
+
+    .informal-report-signature-grid {
+        display: grid;
+        grid-template-columns: 1.5fr 0.8fr;
+        gap: 1.1rem 1.25rem;
+        margin-top: 1.25rem;
+    }
+
+    .informal-report-signature-block {
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+    }
+
+    .informal-report-signature-label {
+        font-weight: 500;
+    }
+
+    .informal-report-signature-placeholder {
+        color: #8a8a8a;
+        font-size: 0.95rem;
+        margin-top: 0.15rem;
+    }
+
+    .informal-report-signature-line {
+        border-bottom: 2px solid #9a9a9a;
+        min-height: 24px;
+    }
+
+    .informal-report-confirmation-note {
+        margin: 0.8rem 0 0;
+        color: #66a64a;
+        font-size: 0.95rem;
+        font-weight: 500;
+    }
+
+    .informal-report-read-title,
+    .informal-report-routing-title,
+    .informal-report-contact-title {
+        margin: 1.2rem 0 0.55rem;
+        font-size: 1.05rem;
+        font-weight: 800;
+    }
+
+    .informal-report-copy {
+        margin: 0 0 1rem;
+        line-height: 1.45;
+        font-size: 0.98rem;
+    }
+
+    .informal-report-emphasis {
+        font-weight: 800;
+    }
+
+    .informal-report-office-box {
+        margin-top: 1rem;
+        background: #efefef;
+        border: 2px solid #8d8d8d;
+        padding: 1rem 1.25rem 1.1rem;
+        max-width: 760px;
+    }
+
+    .informal-report-office-box h3 {
+        margin: 0 0 0.75rem;
+        font-size: 1rem;
+        font-weight: 800;
+    }
+
+    .informal-report-office-line {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 0.75rem;
+        align-items: center;
+        margin-bottom: 0.75rem;
+        font-size: 0.95rem;
+    }
+
+    .informal-report-office-fill {
+        border-bottom: 2px solid #7d7d7d;
+        min-height: 12px;
+    }
+
+    .informal-report-office-comments {
+        margin-top: 0.25rem;
+    }
+
+    .informal-report-office-comments-label {
+        margin-bottom: 0.45rem;
+        font-size: 0.95rem;
+    }
+
+    .informal-report-office-comments-line {
+        border-bottom: 2px solid #7d7d7d;
+        min-height: 16px;
+        margin-bottom: 0.5rem;
+    }
+
+    .informal-report-actions {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        max-width: 620px;
+        margin: 2rem auto 0;
+    }
+
+    .informal-report-button {
+        min-width: 190px;
+        padding: 0.82rem 1.2rem;
+        border-radius: 0.55rem;
+        border: 2px solid #7a7a7a;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        background: #fff;
+        color: #111;
+    }
+
+    .informal-report-button-secondary {
+        color: #222;
+    }
+
+    .field-validation-error,
+    .text-danger {
+        color: #b42318;
+        font-size: 0.9rem;
+    }
+
+    @@media (max-width: 820px) {
+        .informal-report-document {
+            padding: 1.2rem 1rem 2rem;
+        }
+
+        .informal-report-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .informal-report-logo {
+            justify-content: flex-start;
+            text-align: left;
+        }
+
+        .informal-report-grid,
+        .informal-report-signature-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .informal-report-actions {
+            flex-direction: column;
+            max-width: none;
+        }
+
+        .informal-report-button {
+            width: 100%;
+        }
+    }
+</style>
+
+<section class="informal-report-shell">
+    <article class="informal-report-document">
+        <header class="informal-report-header">
+            <div>
+                <p class="informal-report-school">James Madison University</p>
+                <h1 class="informal-report-title">Honor Council Informal<br />Resolution Agreement</h1>
+            </div>
+
+            <div class="informal-report-logo" aria-label="James Madison University">
+                <div class="informal-report-logo-mark">JMU</div>
+                <div class="informal-report-logo-text">James<br />Madison<br />University</div>
+            </div>
+        </header>
+
+        <p class="informal-report-system-note">
+            System check: If this student already has an informal resolution on file, this submission will be blocked - a second violation must be filed as a formal report.
+        </p>
+
+        <form method="post" novalidate>
+            <div asp-validation-summary="ModelOnly" class="informal-report-validation"></div>
+
+            <section class="informal-report-section">
+                <h2>I. Faculty Information</h2>
+
+                <div class="informal-report-grid">
+                    <div class="informal-report-field full">
+                        <label asp-for="Input.FacultyName" class="informal-report-label">Faculty Name</label>
+                        <input asp-for="Input.FacultyName" class="informal-report-input" placeholder="Full name" />
+                        <span asp-validation-for="Input.FacultyName" class="text-danger"></span>
+                    </div>
+
+                    <div class="informal-report-field">
+                        <label asp-for="Input.FacultyDepartment" class="informal-report-label">Office</label>
+                        <input asp-for="Input.FacultyDepartment" class="informal-report-input" placeholder="Office / department" />
+                    </div>
+
+                    <div class="informal-report-field">
+                        <label class="informal-report-label">Date</label>
+                        <input type="text" class="informal-report-input" value="@reportDateValue.ToString("MM/dd/yyyy")" readonly />
+                        <input asp-for="Input.ReportDate" type="hidden" />
+                    </div>
+
+                    <div class="informal-report-field">
+                        <label asp-for="Input.FacultyPhone" class="informal-report-label">Phone</label>
+                        <input asp-for="Input.FacultyPhone" class="informal-report-input" placeholder="(XXX) XXX-XXXX" />
+                    </div>
+
+                    <div class="informal-report-field">
+                        <label asp-for="Input.FacultyEmail" class="informal-report-label">Faculty E-mail</label>
+                        <input asp-for="Input.FacultyEmail" class="informal-report-input" placeholder="@@jmu.edu" />
+                        <span asp-validation-for="Input.FacultyEmail" class="text-danger"></span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="informal-report-section">
+                <h2>II. Course Information</h2>
+
+                <div class="informal-report-grid">
+                    <div class="informal-report-field">
+                        <label asp-for="Input.CourseName" class="informal-report-label">Course Title</label>
+                        <input asp-for="Input.CourseName" class="informal-report-input" placeholder="Full course name" />
+                        <span asp-validation-for="Input.CourseName" class="text-danger"></span>
+                    </div>
+
+                    <div class="informal-report-field">
+                        <label asp-for="Input.CourseCode" class="informal-report-label">Course Number</label>
+                        <input asp-for="Input.CourseCode" class="informal-report-input" placeholder="e.g. CIS 484" />
+                        <span asp-validation-for="Input.CourseCode" class="text-danger"></span>
+                    </div>
+
+                    <div class="informal-report-field">
+                        <label asp-for="Input.Term" class="informal-report-label">Semester</label>
+                        <input asp-for="Input.Term" class="informal-report-input" placeholder="e.g. Spring 2026" />
+                    </div>
+
+                    <div class="informal-report-field">
+                        <span class="informal-report-label">Course Format</span>
+                        <div class="informal-report-radio-row">
+                            <label>
+                                <input asp-for="Input.CourseFormat" type="radio" value="Online" />
+                                Online
+                            </label>
+                            <label>
+                                <input asp-for="Input.CourseFormat" type="radio" value="In-person" />
+                                In-person
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="informal-report-section">
+                <h2>III. Student Information</h2>
+
+                <div class="informal-report-grid">
+                    <div class="informal-report-field">
+                        <label asp-for="Input.StudentName" class="informal-report-label">Student Name</label>
+                        <input asp-for="Input.StudentName" class="informal-report-input" placeholder="e.g. John Doe" />
+                        <span asp-validation-for="Input.StudentName" class="text-danger"></span>
+                    </div>
+
+                    <div class="informal-report-field">
+                        <label asp-for="Input.StudentNumber" class="informal-report-label">Student ID Number</label>
+                        <input asp-for="Input.StudentNumber" class="informal-report-input" placeholder="eid number" />
+                        <span asp-validation-for="Input.StudentNumber" class="text-danger"></span>
+                    </div>
+
+                    <div class="informal-report-field full">
+                        <span class="informal-report-label">Year</span>
+                        <div class="informal-report-radio-row">
+                            @foreach (var year in new[] { "Freshman", "Sophomore", "Junior", "Senior", "Graduate student" })
+                            {
+                                <label>
+                                    <input asp-for="Input.StudentAcademicYear" type="radio" value="@year" />
+                                    @year
+                                </label>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="informal-report-field">
+                        <label asp-for="Input.StudentEmail" class="informal-report-label">Student E-mail</label>
+                        <input asp-for="Input.StudentEmail" class="informal-report-input" placeholder="@@dukes.jmu.edu" />
+                        <span asp-validation-for="Input.StudentEmail" class="text-danger"></span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="informal-report-section">
+                <h2>IV. Violation Information</h2>
+
+                <div class="informal-report-grid">
+                    <div class="informal-report-field">
+                        <label asp-for="Input.ViolationDate" class="informal-report-label">Date of Occurrence of Violation</label>
+                        <input asp-for="Input.ViolationDate"
+                               type="date"
+                               class="informal-report-input"
+                               min="@earliestViolationDate"
+                               data-window-message="Reports must be filed within 90 days of the violation date." />
+                        <span asp-validation-for="Input.ViolationDate" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <p class="informal-report-rule">
+                    This report must be filed within <strong>90 days</strong> of the occurrence of the violation.
+                </p>
+
+                @if (!Model.IsWithinWindow)
+                {
+                    <p class="informal-report-rule-error">
+                        Invalid date. Informal reports must be filed within 90 days of the occurrence.
+                    </p>
+                }
+
+                <div class="informal-report-field" style="margin-top: 1rem;">
+                    <label asp-for="Input.Description" class="informal-report-label">Description of Violation</label>
+                    <textarea asp-for="Input.Description" rows="4" class="informal-report-textarea" placeholder="Describe what occurred..."></textarea>
+                    <span asp-validation-for="Input.Description" class="text-danger"></span>
+                </div>
+            </section>
+
+            <section class="informal-report-section">
+                <h2>V. Agreement Information</h2>
+
+                <div class="informal-report-grid">
+                    <div class="informal-report-field">
+                        <label asp-for="Input.AgreementDate" class="informal-report-label">Date of Agreement</label>
+                        <input asp-for="Input.AgreementDate" type="date" class="informal-report-input" />
+                        <span asp-validation-for="Input.AgreementDate" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="informal-report-field" style="margin-top: 1rem;">
+                    <label asp-for="Input.SubmissionNotes" class="informal-report-label">Description of Penalty</label>
+                    <textarea asp-for="Input.SubmissionNotes" rows="4" class="informal-report-textarea" placeholder="Describe the penalty assigned by the faculty member..."></textarea>
+                    <span asp-validation-for="Input.SubmissionNotes" class="text-danger"></span>
+                </div>
+
+                <div class="informal-report-signature-grid">
+                    <div class="informal-report-signature-block">
+                        <div class="informal-report-signature-label">Faculty Member Signature</div>
+                        <div class="informal-report-signature-placeholder">Sign here</div>
+                        <div class="informal-report-signature-line"></div>
+                    </div>
+
+                    <div class="informal-report-signature-block">
+                        <div class="informal-report-signature-label">Date</div>
+                        <div class="informal-report-signature-placeholder">&nbsp;</div>
+                        <div class="informal-report-signature-line"></div>
+                    </div>
+
+                    <div class="informal-report-signature-block">
+                        <div class="informal-report-signature-label">Student Signature</div>
+                        <div class="informal-report-signature-placeholder">Sign here</div>
+                        <div class="informal-report-signature-line"></div>
+                    </div>
+
+                    <div class="informal-report-signature-block">
+                        <div class="informal-report-signature-label">Date</div>
+                        <div class="informal-report-signature-placeholder">&nbsp;</div>
+                        <div class="informal-report-signature-line"></div>
+                    </div>
+                </div>
+
+                <p class="informal-report-confirmation-note">
+                    A confirmation e-mail will be sent by the Honor Council to the student’s @@dukes.jmu.edu account upon submission
+                </p>
+
+                <p class="informal-report-read-title">Please read before signing:</p>
+
+                <p class="informal-report-copy">
+                    By signing this resolution, you agree with the description of the violation above and the penalty. Additionally, you are not allowed to withdraw from this course, without permission of the instructor. Students are only permitted to complete an Informal Resolution for their first violation of the Honor Code. This is your first violation and this document will remain on file with the honor council until your graduation. A second violation of the Honor Code will result in suspension from the university for one semester, an “F” in the course in which the second violation has occurred and a transcript notation.
+                </p>
+
+                <p class="informal-report-copy informal-report-emphasis">
+                    If the penalty of an “F in the course” is assigned for an Honor Code violation, the course cannot be repeated using the Repeat/Forgiveness option.
+                </p>
+
+                <p class="informal-report-routing-title">Submission Routing</p>
+                <p class="informal-report-copy">
+                    This form is sent to <strong>honorcouncil@jmu.edu only</strong>. Physical copies may be submitted to JMU Honor Council, MSC 7506.
+                </p>
+
+                <p class="informal-report-contact-title">Questions, please contact:</p>
+                <p class="informal-report-copy" style="margin-bottom: 0;">
+                    Masoud Kaveh-Baghbadorani, Honor Council Coordinator,<br />
+                    <a href="mailto:kavehbmx@jmu.edu">kavehbmx@jmu.edu</a>, (540) 568-4173
+                </p>
+
+                <div class="informal-report-office-box">
+                    <h3>Office Use Only:</h3>
+
+                    <div class="informal-report-office-line">
+                        <span>Honor Council Coordinator Signature:</span>
+                        <div class="informal-report-office-fill"></div>
+                    </div>
+
+                    <div class="informal-report-office-line">
+                        <span>Confirmation Letter Sent:</span>
+                        <div class="informal-report-office-fill"></div>
+                    </div>
+
+                    <div class="informal-report-office-comments">
+                        <div class="informal-report-office-comments-label">Comments:</div>
+                        <div class="informal-report-office-comments-line"></div>
+                        <div class="informal-report-office-comments-line"></div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="informal-report-actions">
+                <button type="button" class="informal-report-button informal-report-button-secondary" disabled>Save Draft</button>
+                <button type="submit" class="informal-report-button">Submit Informal Resolution</button>
+            </div>
+        </form>
+    </article>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (() => {
+            const violationDateInput = document.getElementById("Input_ViolationDate");
+            if (!violationDateInput) {
+                return;
+            }
+
+            const validationMessage = violationDateInput.dataset.windowMessage || "Reports must be filed within 90 days of the violation date.";
+            const earliestAllowedDate = violationDateInput.min;
+
+            const validateViolationDate = () => {
+                const selectedDate = violationDateInput.value;
+
+                if (!selectedDate || !earliestAllowedDate || selectedDate >= earliestAllowedDate) {
+                    violationDateInput.setCustomValidity("");
+                    return;
+                }
+
+                violationDateInput.setCustomValidity(validationMessage);
+                violationDateInput.reportValidity();
+            };
+
+            violationDateInput.addEventListener("change", validateViolationDate);
+            violationDateInput.addEventListener("input", validateViolationDate);
+        })();
+    </script>
+}

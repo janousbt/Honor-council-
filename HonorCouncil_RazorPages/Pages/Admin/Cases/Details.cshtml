@@ -1,0 +1,246 @@
+@page "{id:int}"
+@model HonorCouncil_RazorPages.Pages.Admin.Cases.DetailsModel
+@{
+    ViewData["Title"] = "Case details";
+    var priorityBadgeClass = Model.CaseDetail.PriorityLabel.ToLowerInvariant() switch
+    {
+        var label when label.Contains("second") || label.Contains("senior") || label.Contains("high") || label.Contains("urgent") => "badge-danger",
+        var label when label.Contains("formal") || label.Contains("review") || label.Contains("priority") => "badge-warning",
+        _ => "badge-info"
+    };
+}
+
+<section class="page-shell">
+    <header class="page-header">
+        <div>
+            <p class="eyebrow">Case @Model.CaseDetail.CaseNumber</p>
+            <h1>Case detail</h1>
+        </div>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <a class="button button-primary admin-case-action-button" asp-page="/Admin/Hearings/Schedule" asp-route-caseId="@Model.CaseDetail.CaseId">Schedule hearing</a>
+            <span class="badge @priorityBadgeClass">@Model.CaseDetail.PriorityLabel</span>
+            <span class="badge @(Model.CaseDetail.ReportType == ReportType.Formal ? "badge-accent" : "badge-warning")">@Model.CaseDetail.ReportType</span>
+            <span class="badge @(Model.CaseDetail.IsWithinFormalWindow ? "badge-success" : "badge-danger")">
+                @(Model.CaseDetail.IsWithinFormalWindow ? "Within 90 days" : "Outside 90 days")
+            </span>
+        </div>
+    </header>
+
+    @if (!string.IsNullOrWhiteSpace(Model.StatusMessage))
+    {
+        <article class="panel">
+            <p class="page-note">@Model.StatusMessage</p>
+        </article>
+    }
+
+    <div class="admin-detail-grid admin-detail-grid-main">
+        <div class="admin-detail-column">
+            <article class="panel">
+                <h2>Student</h2>
+                <dl class="summary-grid">
+                    <dt>Name</dt><dd>@Model.CaseDetail.StudentName</dd>
+                    <dt>Student ID</dt><dd>@Model.CaseDetail.StudentNumber</dd>
+                    <dt>Email</dt><dd>@Model.CaseDetail.StudentEmail</dd>
+                    <dt>Year</dt><dd>@Model.CaseDetail.StudentAcademicYear</dd>
+                </dl>
+                <form method="post" asp-page-handler="RequestClassSchedule" class="form-grid admin-student-schedule-request">
+                    <input type="hidden" asp-for="ScheduleRequestInput.CaseId" />
+                    <button type="submit" class="button button-primary admin-student-schedule-button">Request class schedule</button>
+                </form>
+                <div class="admin-student-schedule-list">
+                    <h3>Student Schedule</h3>
+                    @if (Model.CaseDetail.StudentScheduleFiles.Count == 0)
+                    {
+                        <p class="empty-state">No class schedules have been uploaded yet.</p>
+                    }
+                    else
+                    {
+                        <ul class="summary-list">
+                            @foreach (var schedule in Model.CaseDetail.StudentScheduleFiles)
+                            {
+                                <li>
+                                    <strong>@schedule.FileName</strong> by @schedule.UploadedBy on @schedule.UploadedUtcDisplay
+                                    <a asp-page="/Schedule/Download" asp-route-id="@schedule.Id">Download</a>
+                                </li>
+                            }
+                        </ul>
+                    }
+                </div>
+            </article>
+
+            <article class="panel">
+                <h2>Witnesses</h2>
+                @if (Model.CaseDetail.Witnesses.Count == 0)
+                {
+                    <p class="empty-state">No witnesses listed for this case.</p>
+                }
+                else
+                {
+                    <ul class="summary-list">
+                        @foreach (var witness in Model.CaseDetail.Witnesses)
+                        {
+                            <li>@witness.FullName @(string.IsNullOrWhiteSpace(witness.Email) ? "" : $"- {witness.Email}")</li>
+                        }
+                    </ul>
+                }
+            </article>
+        </div>
+
+        <div class="admin-detail-column">
+            <article class="panel">
+                <h2>Violation details</h2>
+                <dl class="summary-grid">
+                    <dt>Date of violation</dt><dd>@Model.CaseDetail.ViolationDate.ToString("MMMM d, yyyy")</dd>
+                    <dt>Date filed</dt><dd>@Model.CaseDetail.FiledUtc.ToLocalTime().ToString("MMMM d, yyyy")</dd>
+                    <dt>Status</dt><dd>@Model.CaseDetail.StatusDisplay</dd>
+                    <dt>Course</dt><dd>@Model.CaseDetail.CourseDisplay</dd>
+                    <dt>Outcome</dt><dd>@(string.IsNullOrWhiteSpace(Model.CaseDetail.OutcomeSummary) ? "Pending" : Model.CaseDetail.OutcomeSummary)</dd>
+                </dl>
+                <p>@Model.CaseDetail.Description</p>
+            </article>
+
+            <article class="panel">
+                <h2>Case status timeline</h2>
+                <ul class="summary-list">
+                    @foreach (var item in Model.CaseDetail.Timeline)
+                    {
+                        <li>
+                            <strong>@item.Title</strong> - @item.WhenDisplay
+                            @if (!string.IsNullOrWhiteSpace(item.Notes))
+                            {
+                                <div><small>@item.Notes</small></div>
+                            }
+                        </li>
+                    }
+                </ul>
+            </article>
+        </div>
+
+        <div class="admin-detail-column">
+            <article class="panel">
+                <h2>Reporting faculty</h2>
+                <dl class="summary-grid">
+                    <dt>Name</dt><dd>@Model.CaseDetail.FacultyName</dd>
+                    <dt>Department</dt><dd>@Model.CaseDetail.FacultyDepartment</dd>
+                    <dt>Email</dt><dd>@Model.CaseDetail.FacultyEmail</dd>
+                    @if (Model.CaseDetail.ReportType == ReportType.Formal)
+                    {
+                        <dt>Investigator</dt><dd>@(Model.CaseDetail.InvestigatorName ?? "Pending assignment")</dd>
+                    }
+                </dl>
+            </article>
+
+            <article class="panel">
+                <h2>Evidence on file</h2>
+                <form method="post" enctype="multipart/form-data" asp-page-handler="UploadEvidence" asp-route-id="@Model.CaseDetail.CaseId" class="form-grid" style="margin-bottom: 1rem;">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="field-group">
+                        <label for="admin-evidence-upload">Upload evidence</label>
+                        <input id="admin-evidence-upload" type="file" name="uploadFiles" multiple />
+                    </div>
+                    <button type="submit" class="button button-primary">Upload files</button>
+                </form>
+                @if (Model.CaseDetail.EvidenceFiles.Count == 0)
+                {
+                    <p class="empty-state">No evidence uploaded yet.</p>
+                }
+                else
+                {
+                    <ul class="summary-list">
+                        @foreach (var evidence in Model.CaseDetail.EvidenceFiles)
+                        {
+                            <li>
+                                <strong>@evidence.FileName</strong> by @evidence.UploadedBy (@evidence.UploadedByRole) on @evidence.UploadedUtcDisplay
+                                <a asp-page="/Evidence/Download" asp-route-id="@evidence.Id">Download</a>
+                            </li>
+                        }
+                    </ul>
+                }
+            </article>
+        </div>
+    </div>
+
+    <div class="admin-detail-grid admin-detail-grid-actions">
+        <div class="admin-detail-column">
+            @if (Model.CaseDetail.ReportType == ReportType.Formal)
+            {
+                <article class="panel">
+                    <div class="panel-heading">
+                        <h2>Assign investigator</h2>
+                        <span class="badge badge-warning">Action</span>
+                    </div>
+                    <form method="post" asp-page-handler="AssignInvestigator" class="form-grid">
+                        <input type="hidden" asp-for="AssignInput.CaseId" />
+                        <div class="field-group">
+                            <label asp-for="AssignInput.InvestigatorId"></label>
+                            <select asp-for="AssignInput.InvestigatorId" asp-items="Model.InvestigatorOptions"></select>
+                        </div>
+                        <button type="submit" class="button button-primary">Assign investigator</button>
+                    </form>
+                </article>
+            }
+        </div>
+
+        <div class="admin-detail-column">
+            <article class="panel">
+                <div class="panel-heading">
+                    <h2>Update status</h2>
+                    <span class="badge badge-info">Timeline</span>
+                </div>
+                <form method="post" asp-page-handler="UpdateStatus" class="form-grid">
+                    <input type="hidden" asp-for="StatusInput.CaseId" />
+                    <div class="field-group">
+                        <label asp-for="StatusInput.Status"></label>
+                        <select asp-for="StatusInput.Status" asp-items="Model.StatusOptions"></select>
+                    </div>
+                    <div class="field-group">
+                        <label asp-for="StatusInput.Notes"></label>
+                        <textarea asp-for="StatusInput.Notes" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="button button-primary admin-case-action-button">Save status update</button>
+                </form>
+            </article>
+        </div>
+
+        <div class="admin-detail-column">
+            <article class="panel">
+                <div class="panel-heading">
+                    <h2>Finalize outcome</h2>
+                    <span class="badge badge-success">Phase 5</span>
+                </div>
+                <form method="post" asp-page-handler="FinalizeOutcome" class="form-grid">
+                    <input type="hidden" asp-for="OutcomeInput.CaseId" />
+                    <div class="field-group">
+                        <label asp-for="OutcomeInput.OutcomeSummary"></label>
+                        <textarea asp-for="OutcomeInput.OutcomeSummary" rows="4"></textarea>
+                    </div>
+                    <div class="field-group">
+                        <label class="form-check-label">
+                            <input asp-for="OutcomeInput.CloseCaseImmediately" type="checkbox" />
+                            Close case immediately after issuing outcome
+                        </label>
+                    </div>
+                    <button type="submit" class="button button-primary">Issue outcome</button>
+                </form>
+            </article>
+
+            @if (Model.CaseDetail.ReportType == ReportType.Formal && !string.IsNullOrWhiteSpace(Model.CaseDetail.OutcomeSummary))
+            {
+                <article class="panel">
+                    <div class="panel-heading">
+                        <h2>Appeal</h2>
+                        <span class="badge badge-warning">@Model.CaseDetail.AppealStatusDisplay</span>
+                    </div>
+                    @if (Model.CaseDetail.HasAppeal)
+                    {
+                        <a asp-page="/Admin/Appeals/Details" asp-route-caseId="@Model.CaseDetail.CaseId">Review appeal</a>
+                    }
+                    else
+                    {
+                        <p class="empty-state">No appeal has been filed for this case.</p>
+                    }
+                </article>
+            }
+        </div>
+    </div>
+</section>
